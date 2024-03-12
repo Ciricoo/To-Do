@@ -7,9 +7,9 @@ function addTask() {
         let div = document.createElement("div");
         let container = document.querySelector("#tasks-container");
         my_element = `
-        <div id="container-${index}" class="itens">
+        <div id="container-${index}"  class="itens" draggable="true" ondragstrart="dragStart(event)" >
         
-            <div style="display: flex; justify-content: center; align-items: center; font-size: 20px; margin-bottom: -15px"  id=text-${index}>${taskText}</div>
+            <div style="display: flex; justify-content: center; align-items: center; font-size: 20px; margin-bottom: -15px; grab cursor: -webkit-grab; cursor: grab;" id=text-${index}>${taskText}</div>
             
             
             <div style="display:flex; justify-content: space-between; gap: 8px; padding-bottom: 5px; padding-top:10px"> 
@@ -60,3 +60,4 @@ function concluir(index) {
         container.className = 'completed'
     }
 }
+
