@@ -9,15 +9,18 @@ function addTask() {
         my_element = `
         <div id="container-${index}" class="itens">
         
-            <div id=text-${index}>${taskText}</div>
+            <div style="display: flex; justify-content: center; align-items: center;"  id=text-${index}>${taskText}</div>
             
-            <div style="display:flex; justify-content: space-between"> 
+            
+            <div style="display:flex; justify-content: space-between; gap: 8px; padding-bottom: 5px; padding-top:10px"> 
                 <div onclick=concluir(${index})><i class="bi bi-check-all"></i></div>
                 <div onclick=excluir(${index})><i class="bi bi-trash-fill"></i></div>
                 <div onclick=editar(${index})><i class="bi bi-pencil-square"></i></div>
             </div>
-        </div>
 
+            
+        </div>
+        <hr>
         
         `
         div.innerHTML = my_element
