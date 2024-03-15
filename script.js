@@ -11,7 +11,6 @@ window.onload = function() {
 
 document.getElementById("new-task-input").addEventListener("keypress", function(event){
     if (event.key == "Enter"){
-        event.preventDefault();
         addTask();
     }
 });
@@ -92,23 +91,23 @@ function concluir(index) {
     saveTasksToLocalStorage();
 }
 
-function dragStart(event) {
-    event.dataTransfer.setData("text/plain", event.target.id);
-}
+// function dragStart(event) {
+//     event.dataTransfer.setData("text/plain", event.target.id);
+// }
 
-function allowDrop(event) {
-    event.preventDefault();
-}
+// function allowDrop(event) {
+//     event.preventDefault();
+// }
 
-function drop(event) {
-    event.preventDefault();
-    const data = event.dataTransfer.getData("text/plain");
-    const draggedElement = document.getElementById(data);
-    const dropzone = event.target.closest('.itens');
-    if (dropzone) {
-        dropzone.parentNode.insertBefore(draggedElement, dropzone.nextSibling);
-        saveTasksToLocalStorage();
-    }
-}
+// function drop(event) {
+//     event.preventDefault();
+//     const data = event.dataTransfer.getData("text/plain");
+//     const draggedElement = document.getElementById(data);
+//     const dropzone = event.target.closest('.itens');
+//     if (dropzone) {
+//         dropzone.parentNode.insertBefore(draggedElement, dropzone.nextSibling);
+//         saveTasksToLocalStorage();
+//     }
+// }
 
 
