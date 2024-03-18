@@ -15,6 +15,8 @@ document.getElementById("new-task-input").addEventListener("keypress", function(
     }
 });
 
+
+
 function addTask(taskText = null, completed = false) {
     let input = document.querySelector("#new-task-input");
     if (!taskText) {
@@ -52,6 +54,7 @@ function addTask(taskText = null, completed = false) {
     }
 }
 
+// armazenar os dados salvos em índice, para precisar recarregar e salvar somente os itens editados, concluidos e excluidos
 
 function saveTasksToLocalStorage() {
     let tasks = [];
@@ -66,13 +69,19 @@ function saveTasksToLocalStorage() {
 }
 
 function excluir(index) {
+    let confirmation = confirm("Tem certeza que deseja excluir?")
+    
+    if(confirmation){
     let container = document.querySelector(`#container-${index}`);
     let hr = document.querySelector(`#hr-${index}`);
     container.remove();
     hr.remove();
     
     saveTasksToLocalStorage();
+    }
 }
+
+// editar no próprio input e quando for editado indentificar se o botão é de adicionar ou editar
 
 function editar(index) {
     let text = document.querySelector(`#text-${index}`);
@@ -84,6 +93,7 @@ function editar(index) {
     }
 }
 
+
 function concluir(index) {
     let container = document.querySelector(`#container-${index}`);
     container.classList.toggle('completed');
@@ -91,5 +101,21 @@ function concluir(index) {
 }
 
 
+function dragStart(event) {
+    event.dataTransfer.setData("text/plain", event.target.id);
+}
 
+function allowDrop(event) {
+    event.preventDefault();
+}
 
+function drop(event) {
+    event.preventDefault();
+    const data = event.dataTransfer.getData("text/plain");
+    const draggedElement = document.getElementById(data);
+    const dropzone = event.target.closest('.itens');
+    if (dropzone) {
+        dropzone.parentNode.insertBefore(draggedElement, dropzone.nextSibling);
+        saveTasksToLocalStorage();
+    }
+}
