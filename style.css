@@ -100,3 +100,11 @@ body {
     color: gray;
 }
 
+.edit-task-input {
+    width: 100%;
+    margin-bottom: -15px;
+}
+
+.new-task-container.editing #new-task-input {
+    display: none;
+}
