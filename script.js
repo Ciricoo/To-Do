@@ -1,6 +1,6 @@
 let index = 0;
 
-window.onload = function() {
+window.onload = function () {
     let savedTasks = JSON.parse(localStorage.getItem('tasks'));
     if (savedTasks) {
         savedTasks.forEach(task => {
@@ -9,13 +9,11 @@ window.onload = function() {
     }
 }
 
-document.getElementById("new-task-input").addEventListener("keypress", function(event){
-    if (event.key == "Enter"){
+document.getElementById("new-task-input").addEventListener("keypress", function (event) {
+    if (event.key == "Enter") {
         addTask();
     }
 });
-
-
 
 function addTask(taskText = null, completed = false) {
     let input = document.querySelector("#new-task-input");
@@ -27,6 +25,7 @@ function addTask(taskText = null, completed = false) {
         let div = document.createElement("div");
         let container = document.querySelector("#tasks-container");
         let completedClass = completed ? 'completed' : '';
+
         my_element = `
         <div id="container-${index}" class="itens ${completedClass}" draggable="true" ondragstart="dragStart(event)" ondrop="drop(event)" ondragover="allowDrop(event)">
             <div style="display: flex; justify-content: center; align-items: center; font-size: 20px; margin-bottom: -15px; cursor: grab;" id="text-${index}">${taskText}</div>
@@ -44,18 +43,18 @@ function addTask(taskText = null, completed = false) {
         </div>
         <hr id="hr-${index}">
         `;
+
         div.innerHTML = my_element;
         container.appendChild(div);
         input.value = '';
-        
+
         saveTasksToLocalStorage();
-        
+
         index++;
     }
 }
 
-// armazenar os dados salvos em índice, para precisar recarregar e salvar somente os itens editados, concluidos e excluidos
-
+// fazer que cada item seja salvo, não todos de uma vez, cada vez que essa função seja chamada, salve somente o index alterado e não todos os itens
 function saveTasksToLocalStorage() {
     let tasks = [];
     let containers = document.querySelectorAll(".itens");
@@ -70,36 +69,49 @@ function saveTasksToLocalStorage() {
 
 function excluir(index) {
     let confirmation = confirm("Tem certeza que deseja excluir?")
-    
-    if(confirmation){
-    let container = document.querySelector(`#container-${index}`);
-    let hr = document.querySelector(`#hr-${index}`);
-    container.remove();
-    hr.remove();
-    
-    saveTasksToLocalStorage();
-    }
-}
 
-// editar no próprio input e quando for editado indentificar se o botão é de adicionar ou editar
+    if (confirmation) {
+        let container = document.querySelector(`#container-${index}`);
+        let hr = document.querySelector(`#hr-${index}`);
+        container.remove();
+        hr.remove();
 
-function editar(index) {
-    let text = document.querySelector(`#text-${index}`);
-    var newText = prompt("Editar tarefa:", text.textContent);
-    if (newText !== null && newText.trim() !== "") { 
-        text.textContent = newText.trim();
-        
         saveTasksToLocalStorage();
     }
 }
 
+function editar(index) {
+    let input = document.querySelector("#new-task-input");
+    let text = document.querySelector(`#text-${index}`);
+    let editBtn = document.getElementById('new-task-button');
+
+    input.value = text.textContent.trim();
+
+    editBtn.textContent = "EDIT";
+
+    editBtn.onclick = function () {
+        salvarEdicao(index);
+    };
+}
+
+function salvarEdicao(index) {
+    let input = document.querySelector("#new-task-input");
+    let text = document.querySelector(`#text-${index}`);
+    text.textContent = input.value.trim();
+
+    let editBtn = document.getElementById('new-task-button');
+    editBtn.textContent = "ADD";
+    editBtn.onclick = addTask;
+    input.value = '';
+
+    saveTasksToLocalStorage();
+}
 
 function concluir(index) {
     let container = document.querySelector(`#container-${index}`);
     container.classList.toggle('completed');
     saveTasksToLocalStorage();
 }
-
 
 function dragStart(event) {
     event.dataTransfer.setData("text/plain", event.target.id);
