@@ -84,17 +84,19 @@ function editar(index) {
     let input = document.querySelector("#new-task-input");
     let text = document.querySelector(`#text-${index}`);
     let editBtn = document.getElementById('new-task-button');
-
+    
     input.value = text.textContent.trim();
 
     editBtn.textContent = "EDIT";
 
-    editBtn.onclick = function () {
+    editBtn.onclick = function (){
         salvarEdicao(index);
-    };
+
+    }
+
 }
 
-function salvarEdicao(index) {
+function salvarEdicao(index){
     let input = document.querySelector("#new-task-input");
     let text = document.querySelector(`#text-${index}`);
     text.textContent = input.value.trim();
