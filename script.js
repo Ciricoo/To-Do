@@ -8,10 +8,21 @@ window.onload = function () {
         });
     }
 }
+// criar uma função que verifica se o id ou index existe, se sim ele edita e se não existe ele adciona
+function verifica(){
+    let existingTask = document.getElementById("editar");
+    if (existingTask) {
+        // Se a tarefa já existe, edite-a
+        editar();
+    } else {
+        // Se a tarefa não existe, adicione-a
+        addTask();
+    }
+}
 
 document.getElementById("new-task-input").addEventListener("keypress", function (event) {
     if (event.key == "Enter") {
-        addTask();
+        verifica();
     }
 });
 
@@ -29,7 +40,10 @@ function deleteAll(){
             hr.remove();
             saveTasksToLocalStorage();
         })
+
+
     }
+
 }
 
 function addTask(taskText = null, completed = false) {
@@ -46,7 +60,7 @@ function addTask(taskText = null, completed = false) {
         my_element = `
         <div id="container-${index}" class="itens ${completedClass}" draggable="true" ondragstart="dragStart(event)" ondrop="drop(event)" ondragover="allowDrop(event)">
             <div style="display: flex; justify-content: center; align-items: center; font-size: 20px; margin-bottom: -15px; cursor: grab;" id="text-${index}">${taskText}</div>
-            <div style="display:flex; justify-content: space-between; gap: 8px; padding-bottom: 5px; padding-top:10px; cursor: pointer;"> 
+            <div style="display:flex; justify-content: space-between; gap: 8px; padding-bottom: 5px; padding-top:10px; "> 
                 <div class="button-itens">
                     <div onclick="concluir(${index})"><i class="bi bi-check-all"></i></div>
                 </div>
@@ -54,7 +68,7 @@ function addTask(taskText = null, completed = false) {
                     <div onclick="excluir(${index})"><i class="bi bi-trash-fill"></i></div>
                 </div>
                 <div class="button-itens azul">
-                    <div onclick="editar(${index})"><i class="bi bi-pencil-square"></i></div>
+                    <div id="editar" onclick="editar(${index})"><i class="bi bi-pencil-square"></i></div>
                 </div>
             </div>
         </div>
@@ -69,6 +83,8 @@ function addTask(taskText = null, completed = false) {
 
         index++;
     }
+
+    
 }
 
 // fazer que cada item seja salvo, não todos de uma vez, cada vez que essa função seja chamada, salve somente o index alterado e não todos os itens
@@ -105,7 +121,7 @@ function editar(index) {
     input.value = text.textContent.trim();
 
     editBtn.textContent = "EDIT";
-
+    editBtn.onclick = addTask;
     editBtn.onclick = function (){
         salvarEdicao(index);
 
@@ -120,7 +136,6 @@ function salvarEdicao(index){
 
     let editBtn = document.getElementById('new-task-button');
     editBtn.textContent = "ADD";
-    editBtn.onclick = addTask;
     input.value = '';
 
     saveTasksToLocalStorage();
