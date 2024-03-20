@@ -22,6 +22,7 @@ body {
 }
 
 .title {
+    margin-left: 80px;
     margin-top: 20px;
     display: flex;
     align-items: center;
@@ -32,12 +33,14 @@ body {
 
 .new-task-container {
     background-color: #fff;
-    padding: 30px 20px;
+    padding: 30px 40px;
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 4px;
     border-radius: 5px;
+    width: 400px;
+    
 }
 
 .new-task-container input {
@@ -61,13 +64,24 @@ body {
     cursor: pointer;
 }
 
-
+.button{
+    width: 100px;
+    border-radius: 5px;
+    font-size: 12px;
+    border: none;
+    background-color: blue;
+    color: #fff;
+    padding: 8px;
+    margin-left: 5px;
+    margin-right: 8px;
+    cursor: pointer;
+}
 .tasks-container {
     background-color: #fff;
     padding: 30px 20px;
     margin-top: 60px;
     border-radius: 5px;
-    width: 100%;
+    width: 125%;
     
 }
 

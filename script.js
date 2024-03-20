@@ -15,6 +15,23 @@ document.getElementById("new-task-input").addEventListener("keypress", function 
     }
 });
 
+function deleteAll(){
+    let confirmation = confirm("Tem certeza que deseja remover todas as tarefas?");
+    if(confirmation){
+        let containers = document.querySelectorAll(".itens");
+        containers.forEach(containers =>{
+            containers.remove();
+            saveTasksToLocalStorage();
+        });
+
+        let hrs = document.querySelectorAll("hr");
+        hrs.forEach(hr => {
+            hr.remove();
+            saveTasksToLocalStorage();
+        })
+    }
+}
+
 function addTask(taskText = null, completed = false) {
     let input = document.querySelector("#new-task-input");
     if (!taskText) {
@@ -29,7 +46,7 @@ function addTask(taskText = null, completed = false) {
         my_element = `
         <div id="container-${index}" class="itens ${completedClass}" draggable="true" ondragstart="dragStart(event)" ondrop="drop(event)" ondragover="allowDrop(event)">
             <div style="display: flex; justify-content: center; align-items: center; font-size: 20px; margin-bottom: -15px; cursor: grab;" id="text-${index}">${taskText}</div>
-            <div style="display:flex; justify-content: space-between; gap: 8px; padding-bottom: 5px; padding-top:10px"> 
+            <div style="display:flex; justify-content: space-between; gap: 8px; padding-bottom: 5px; padding-top:10px; cursor: pointer;"> 
                 <div class="button-itens">
                     <div onclick="concluir(${index})"><i class="bi bi-check-all"></i></div>
                 </div>
