@@ -1,4 +1,6 @@
 let index = 0;
+var isEditing = false;
+let editingIndex = null;
 
 window.onload = function () {
     let savedTasks = JSON.parse(localStorage.getItem('tasks'));
@@ -7,43 +9,6 @@ window.onload = function () {
             addTask(task.text, task.completed);
         });
     }
-}
-// criar uma função que verifica se o id ou index existe, se sim ele edita e se não existe ele adciona
-function verifica(){
-    let existingTask = document.getElementById("editar");
-    if (existingTask) {
-        // Se a tarefa já existe, edite-a
-        editar();
-    } else {
-        // Se a tarefa não existe, adicione-a
-        addTask();
-    }
-}
-
-document.getElementById("new-task-input").addEventListener("keypress", function (event) {
-    if (event.key == "Enter") {
-        verifica();
-    }
-});
-
-function deleteAll(){
-    let confirmation = confirm("Tem certeza que deseja remover todas as tarefas?");
-    if(confirmation){
-        let containers = document.querySelectorAll(".itens");
-        containers.forEach(containers =>{
-            containers.remove();
-            saveTasksToLocalStorage();
-        });
-
-        let hrs = document.querySelectorAll("hr");
-        hrs.forEach(hr => {
-            hr.remove();
-            saveTasksToLocalStorage();
-        })
-
-
-    }
-
 }
 
 function addTask(taskText = null, completed = false) {
@@ -84,10 +49,8 @@ function addTask(taskText = null, completed = false) {
         index++;
     }
 
-    
 }
 
-// fazer que cada item seja salvo, não todos de uma vez, cada vez que essa função seja chamada, salve somente o index alterado e não todos os itens
 function saveTasksToLocalStorage() {
     let tasks = [];
     let containers = document.querySelectorAll(".itens");
@@ -113,33 +76,73 @@ function excluir(index) {
     }
 }
 
+function deleteAll() {
+    let confirmation = confirm("Tem certeza que deseja remover todas as tarefas?");
+    if (confirmation) {
+        let containers = document.querySelectorAll(".itens");
+        containers.forEach(containers => {
+            containers.remove();
+            saveTasksToLocalStorage();
+        });
+
+        let hrs = document.querySelectorAll("hr");
+        hrs.forEach(hr => {
+            hr.remove();
+            saveTasksToLocalStorage();
+        })
+    }
+}
+
 function editar(index) {
+    isEditing = true;
+    editingIndex = index;
     let input = document.querySelector("#new-task-input");
     let text = document.querySelector(`#text-${index}`);
     let editBtn = document.getElementById('new-task-button');
-    
+
     input.value = text.textContent.trim();
 
-    editBtn.textContent = "EDIT";
-    editBtn.onclick = addTask;
-    editBtn.onclick = function (){
-        salvarEdicao(index);
 
+    editBtn.textContent = "EDIT";
+    editBtn.onclick = function () {
+        salvarEdicao(editingIndex);
     }
 
 }
 
-function salvarEdicao(index){
+function salvarEdicao(index) {
     let input = document.querySelector("#new-task-input");
     let text = document.querySelector(`#text-${index}`);
+    let editBtn = document.getElementById('new-task-button');
     text.textContent = input.value.trim();
 
-    let editBtn = document.getElementById('new-task-button');
+
     editBtn.textContent = "ADD";
+    editBtn.onclick = function () {
+        if (editBtn === "EDIT") {
+            salvarEdicao();
+        }
+        else {
+            addTask();
+        }
+    }
     input.value = '';
 
     saveTasksToLocalStorage();
 }
+
+document.getElementById("new-task-input").addEventListener("keypress", function (event) {
+    console.log(isEditing);
+    if (event.key == "Enter") {
+        if (isEditing) {
+            salvarEdicao(editingIndex);
+        } else {
+            addTask();
+        }
+        isEditing = false;
+        editingIndex = null;
+    }
+});
 
 function concluir(index) {
     let container = document.querySelector(`#container-${index}`);
