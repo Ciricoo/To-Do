@@ -50,7 +50,7 @@ function addTask(taskText = null, completed = false) {
     }
 
 }
-
+// salvar somente os elementos que foram editados excluidos ou concluidos por index, mas para o drag e drop essa função que salvar
 function saveTasksToLocalStorage() {
     let tasks = [];
     let containers = document.querySelectorAll(".itens");
@@ -69,10 +69,15 @@ function excluir(index) {
     if (confirmation) {
         let container = document.querySelector(`#container-${index}`);
         let hr = document.querySelector(`#hr-${index}`);
-        container.remove();
-        hr.remove();
-
-        saveTasksToLocalStorage();
+        container.classList.add("fadeOut");
+        hr.classList.add("fadeOut");
+        setTimeout(function(){
+            container.remove();
+            hr.remove();
+            saveTasksToLocalStorage();
+        },500)
+        
+        
     }
 }
 
@@ -80,18 +85,28 @@ function deleteAll() {
     let confirmation = confirm("Tem certeza que deseja remover todas as tarefas?");
     if (confirmation) {
         let containers = document.querySelectorAll(".itens");
-        containers.forEach(containers => {
-            containers.remove();
-            saveTasksToLocalStorage();
-        });
+        containers.forEach(container => {
+                container.classList.add("fadeOut");
+                setTimeout(() => {
+                    container.remove();
+                    saveTasksToLocalStorage();
+                }, 500);
+            });
+            
+            
 
         let hrs = document.querySelectorAll("hr");
         hrs.forEach(hr => {
-            hr.remove();
-            saveTasksToLocalStorage();
-        })
+            hr.classList.add("fadeOut");
+                setTimeout(() => {
+                    hr.remove();
+                    saveTasksToLocalStorage();
+                }, 500);
+            });
+            
+        }
     }
-}
+
 
 function editar(index) {
     isEditing = true;
@@ -134,13 +149,13 @@ function salvarEdicao(index) {
 document.getElementById("new-task-input").addEventListener("keypress", function (event) {
     console.log(isEditing);
     if (event.key == "Enter") {
-        if (isEditing) {
-            salvarEdicao(editingIndex);
+        if (isEditing) { 
+            salvarEdicao(editingIndex); 
         } else {
             addTask();
         }
-        isEditing = false;
-        editingIndex = null;
+        isEditing = false; 
+        editingIndex = null; 
     }
 });
 
